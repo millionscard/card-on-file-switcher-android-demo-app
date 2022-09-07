@@ -1,1 +1,1 @@
-# card-on-file-switcher-android-demo-app
+# card-switcher-java-demo-app
