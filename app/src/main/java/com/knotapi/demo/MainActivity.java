@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import com.knotapi.cardonfileswitcher.CardOnFileSwitcher;
 import com.knotapi.cardonfileswitcher.OnSessionEventListener;
+import com.knotapi.cardonfileswitcher.model.Customization;
 
 public class MainActivity extends AppCompatActivity implements OnSessionEventListener {
 
@@ -22,10 +23,14 @@ public class MainActivity extends AppCompatActivity implements OnSessionEventLis
         setContentView(R.layout.activity_main);
         button = findViewById(R.id.button);
         button.setOnClickListener(view -> {
+            Customization customization = new Customization();
+            customization.setTextColor("#fff000");
+            customization.setPrimaryColor("#ff0000");
+            customization.setCompanyName("Facebook");
+
             cardOnFileSwitcher = CardOnFileSwitcher.getInstance();
-            cardOnFileSwitcher.init(this);
-            cardOnFileSwitcher.setOnSessionEventListener(this);
-            cardOnFileSwitcher.openCardOnFileSwitcher(this, "fc3fe2a1-0795-4e33-84c6-5f34ab96f61a", new int[]{1, 3});
+            cardOnFileSwitcher.init(this, this, customization);
+            cardOnFileSwitcher.openCardOnFileSwitcher("fc3fe2a1-0795-4e33-84c6-5f34ab96f61a", new int[]{1, 3}, false);
         });
     }
 

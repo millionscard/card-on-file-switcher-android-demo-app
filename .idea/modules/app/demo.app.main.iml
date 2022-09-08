@@ -85,6 +85,6 @@
     <orderEntry type="library" name="Gradle: androidx.recyclerview:recyclerview:1.1.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.transition:transition:1.2.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.viewpager2:viewpager2:1.0.0@aar" level="project" />
-    <orderEntry type="library" name="Gradle: com.knotapi.cardonfileswitcher:knotapi-android-sdk:1.0.5@aar" level="project" />
+    <orderEntry type="library" name="Gradle: com.knotapi.cardonfileswitcher:knotapi-android-sdk:1.0.8@aar" level="project" />
   </component>
 </module>
