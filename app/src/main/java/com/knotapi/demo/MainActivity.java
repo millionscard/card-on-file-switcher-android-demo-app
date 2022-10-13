@@ -99,10 +99,10 @@ public class MainActivity extends AppCompatActivity implements OnSessionEventLis
         customization.setCompanyName("Millions");
 
         CardOnFileSwitcher cardOnFileSwitcher = CardOnFileSwitcher.getInstance();
-        cardOnFileSwitcher.init(this, "ab86955e-22f4-49c3-97d7-369973f4cb9e", Environment.SANDBOX);
+        cardOnFileSwitcher.init(this, "76f06c6f-b67c-4d19-b0c2-c1e469e49f41", "ab86955e-22f4-49c3-97d7-369973f4cb9e", Environment.SANDBOX);
         cardOnFileSwitcher.setOnSessionEventListener(this);
         cardOnFileSwitcher.setCustomization(customization);
-        cardOnFileSwitcher.openCardOnFileSwitcher(sessionId, new int[]{});
+        cardOnFileSwitcher.openCardOnFileSwitcher(new int[]{});
     }
 
     private void openSubscriptionCanceller(String sessionId) {
@@ -114,13 +114,8 @@ public class MainActivity extends AppCompatActivity implements OnSessionEventLis
         SubscriptionCanceler subscriptionCanceler = SubscriptionCanceler.getInstance();
         subscriptionCanceler.setCustomization(customization);
         subscriptionCanceler.setOnSessionEventListener(this);
-        subscriptionCanceler.init(this, "ab86955e-22f4-49c3-97d7-369973f4cb9e", Environment.SANDBOX);
-        subscriptionCanceler.openCardOnFileSwitcher(sessionId);
-    }
-
-    @Override
-    public void onInvalidSession(String sessionId, String errorMessage) {
-        Log.d("onInvalidSession", errorMessage);
+        subscriptionCanceler.init(this, "76f06c6f-b67c-4d19-b0c2-c1e469e49f41","ab86955e-22f4-49c3-97d7-369973f4cb9e", Environment.SANDBOX);
+        subscriptionCanceler.openSubscriptionCanceller(true);
     }
 
     @Override
