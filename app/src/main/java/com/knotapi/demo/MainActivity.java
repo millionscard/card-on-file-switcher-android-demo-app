@@ -4,7 +4,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -24,20 +26,44 @@ public class MainActivity extends AppCompatActivity implements OnSessionEventLis
 
     Button btnOpenCardSwitcher, btnOpenSubscriptionCanceller;
     private ProgressDialog progressDialog;
+    SharedPreferences sharedpreferences;
+    private String prefSessionId = "pref_session_id";
+    private String sessionId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        sharedpreferences = getSharedPreferences("sampleApp", Context.MODE_PRIVATE);
         btnOpenCardSwitcher = findViewById(R.id.btnOpenCardSwitcher);
         btnOpenSubscriptionCanceller = findViewById(R.id.btnOpenSubscriptionCanceller);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please wait...");
         progressDialog.setCancelable(false);
-        btnOpenCardSwitcher.setOnClickListener(view -> callCreateUserAPI(false));
-        btnOpenSubscriptionCanceller.setOnClickListener(view -> callCreateUserAPI(true));
+
+        btnOpenCardSwitcher.setOnClickListener(view -> {
+            if (sessionId.equals("")) {
+                callCreateUserAPI(false);
+            } else {
+                openCardSwitcher(sessionId);
+            }
+        });
+
+        btnOpenSubscriptionCanceller.setOnClickListener(view -> {
+            if (sessionId.equals("")) {
+                callCreateUserAPI(true);
+            } else {
+                openSubscriptionCanceller(sessionId);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sessionId = sharedpreferences.getString(prefSessionId, "");
     }
 
     private void callCreateUserAPI(Boolean openSubCanceller) {
@@ -77,6 +103,11 @@ public class MainActivity extends AppCompatActivity implements OnSessionEventLis
             public void onResponse(Call<CreateSessionResponse> call, Response<CreateSessionResponse> response) {
                 CreateSessionResponse createSessionResponse = response.body();
                 progressDialog.hide();
+
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putString(prefSessionId, createSessionResponse.getSession());
+                editor.commit();
+
                 if (openSubCanceller) {
                     openSubscriptionCanceller(createSessionResponse.getSession());
                 } else {
@@ -99,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements OnSessionEventLis
         customization.setCompanyName("Millions");
 
         CardOnFileSwitcher cardOnFileSwitcher = CardOnFileSwitcher.getInstance();
-        cardOnFileSwitcher.init(this, "76f06c6f-b67c-4d19-b0c2-c1e469e49f41", "ab86955e-22f4-49c3-97d7-369973f4cb9e", Environment.SANDBOX);
+        cardOnFileSwitcher.init(this, sessionId, "ab86955e-22f4-49c3-97d7-369973f4cb9e", Environment.SANDBOX);
         cardOnFileSwitcher.setOnSessionEventListener(this);
         cardOnFileSwitcher.setCustomization(customization);
         cardOnFileSwitcher.openCardOnFileSwitcher(new int[]{});
@@ -114,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements OnSessionEventLis
         SubscriptionCanceler subscriptionCanceler = SubscriptionCanceler.getInstance();
         subscriptionCanceler.setCustomization(customization);
         subscriptionCanceler.setOnSessionEventListener(this);
-        subscriptionCanceler.init(this, "76f06c6f-b67c-4d19-b0c2-c1e469e49f41","ab86955e-22f4-49c3-97d7-369973f4cb9e", Environment.SANDBOX);
+        subscriptionCanceler.init(this, sessionId, "ab86955e-22f4-49c3-97d7-369973f4cb9e", Environment.SANDBOX);
         subscriptionCanceler.openSubscriptionCanceller(true);
     }
 
