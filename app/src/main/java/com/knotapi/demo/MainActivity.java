@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements OnSessionEventLis
     }
 
     private void openCardSwitcher(String sessionId) {
-        Configuration switcherConfig = new Configuration(Environment.SANDBOX, "3f4acb6b-a8c9-47bc-820c-b0eaf24ee771", "93fe9429-5cae-451f-a8bb-2c8bdd90ba42");
+        Configuration switcherConfig = new Configuration(Environment.SANDBOX, "3f4acb6b-a8c9-47bc-820c-b0eaf24ee771", sessionId);
         Options options = initOptions();
 
         cardOnFileSwitcher = CardOnFileSwitcher.getInstance();
