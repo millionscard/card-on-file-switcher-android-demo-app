@@ -11,10 +11,11 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.knotapi.cardonfileswitcher.CardOnFileSwitcher;
-import com.knotapi.cardonfileswitcher.Environment;
-import com.knotapi.cardonfileswitcher.OnSessionEventListener;
 import com.knotapi.cardonfileswitcher.SubscriptionCanceler;
-import com.knotapi.cardonfileswitcher.model.Customization;
+import com.knotapi.cardonfileswitcher.interfaces.OnSessionEventListener;
+import com.knotapi.cardonfileswitcher.models.Configuration;
+import com.knotapi.cardonfileswitcher.models.Environment;
+import com.knotapi.cardonfileswitcher.models.Options;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,6 +25,8 @@ public class MainActivity extends AppCompatActivity implements OnSessionEventLis
 
     Button btnOpenCardSwitcher, btnOpenSubscriptionCanceller;
     private ProgressDialog progressDialog;
+    CardOnFileSwitcher cardOnFileSwitcher;
+    SubscriptionCanceler subscriptionCanceler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,29 +96,29 @@ public class MainActivity extends AppCompatActivity implements OnSessionEventLis
     }
 
     private void openCardSwitcher(String sessionId) {
-        Customization customization = new Customization();
-        customization.setTextColor("#ffffff");
-        customization.setPrimaryColor("#000000");
-        customization.setCompanyName("Millions");
+        Configuration switcherConfig = new Configuration(Environment.SANDBOX, "3f4acb6b-a8c9-47bc-820c-b0eaf24ee771", sessionId);
+        Options options = initOptions();
 
-        CardOnFileSwitcher cardOnFileSwitcher = CardOnFileSwitcher.getInstance();
-        cardOnFileSwitcher.init(this, "76f06c6f-b67c-4d19-b0c2-c1e469e49f41", "ab86955e-22f4-49c3-97d7-369973f4cb9e", Environment.SANDBOX);
-        cardOnFileSwitcher.setOnSessionEventListener(this);
-        cardOnFileSwitcher.setCustomization(customization);
-        cardOnFileSwitcher.openCardOnFileSwitcher(new int[]{});
+        cardOnFileSwitcher = CardOnFileSwitcher.getInstance();
+        cardOnFileSwitcher.init(this, switcherConfig, options, this);
+        cardOnFileSwitcher.openCardOnFileSwitcher();
     }
 
     private void openSubscriptionCanceller(String sessionId) {
-        Customization customization = new Customization();
-        customization.setTextColor("#fff000");
-        customization.setPrimaryColor("#ff0000");
-        customization.setCompanyName("Millions");
+        Configuration cancelerConfig = new Configuration(Environment.SANDBOX, "3f4acb6b-a8c9-47bc-820c-b0eaf24ee771", sessionId);
+        Options options = initOptions();
+        subscriptionCanceler = SubscriptionCanceler.getInstance();
+        subscriptionCanceler.init(this, cancelerConfig, options, this);
+        subscriptionCanceler.openSubscriptionCanceller();
+    }
 
-        SubscriptionCanceler subscriptionCanceler = SubscriptionCanceler.getInstance();
-        subscriptionCanceler.setCustomization(customization);
-        subscriptionCanceler.setOnSessionEventListener(this);
-        subscriptionCanceler.init(this, "76f06c6f-b67c-4d19-b0c2-c1e469e49f41","ab86955e-22f4-49c3-97d7-369973f4cb9e", Environment.SANDBOX);
-        subscriptionCanceler.openSubscriptionCanceller(true);
+    public Options initOptions() {
+        Options options = new Options();
+        options.setPrimaryColor("#000000");
+        options.setTextColor("#ffffff");
+        options.setCompanyName("Millions");
+        options.setUseCategories(false);
+        return options;
     }
 
     @Override
