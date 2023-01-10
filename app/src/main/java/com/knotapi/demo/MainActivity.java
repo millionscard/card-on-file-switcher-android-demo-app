@@ -74,7 +74,14 @@ public class MainActivity extends AppCompatActivity implements OnSessionEventLis
     }
 
     private void callCreateSessionAPI(String token, Boolean openSubCanceller) {
-        Call<CreateSessionResponse> call = RetrofitClient.getInstance().getMyApi().createSessionAPI("Bearer " + token);
+        CreateSession createSession = new CreateSession();
+        if (openSubCanceller) {
+            createSession.type = "subscription_canceller";
+        } else {
+            createSession.type = "card_switcher";
+        }
+
+        Call<CreateSessionResponse> call = RetrofitClient.getInstance().getMyApi().createSessionAPI("Bearer " + token, createSession);
         call.enqueue(new Callback<CreateSessionResponse>() {
             @Override
             public void onResponse(Call<CreateSessionResponse> call, Response<CreateSessionResponse> response) {

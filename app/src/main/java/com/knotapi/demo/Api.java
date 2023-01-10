@@ -12,5 +12,5 @@ public interface Api {
     Call<CreateUserResponse> createUserAPI(@Body CreateUserRequest createUserRequest);
 
     @POST("knot/session")
-    Call<CreateSessionResponse> createSessionAPI(@Header("Authorization") String token);
+    Call<CreateSessionResponse> createSessionAPI(@Header("Authorization") String token, @Body CreateSession createSession);
 }
